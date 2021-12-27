@@ -37,7 +37,7 @@ $ docker-compose exec iris iris session iris
 ```
 Or open WebTerminal (preinstalled)
 
-Configure SMPT server
+Configure SMPT server:
 
 ```objectscript
 set sc = ##class(dc.ExampleClass).ConfgureSMTP("{SMTP_Username}", "{SMTP_Password}", "{From}", "{To}", "{SMTP_Server}", "{Port}")
@@ -56,4 +56,6 @@ Send Test Email
 set sc = ##class(dc.ExampleClass).SendEmail()
 ```
 
-Result
+Result:
+
+<img src="https://user-images.githubusercontent.com/19629483/147437430-5f7bb2d7-3997-4eb6-b7dc-83f6e4609b6d.png" width="600" />
