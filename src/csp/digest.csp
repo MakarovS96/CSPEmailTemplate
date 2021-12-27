@@ -1,0 +1,186 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" style="padding:0;margin:0;">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script method = "OnPreHTTP" language="cache" runat="server" returntype="%Boolean">
+    set week = %request.Get("week", 0)
+    set year = %request.Get("year", 0)
+    set maxCategories = %request.Get("maxCategories", 5)
+
+    if (week = "") || (year = "") {
+        set %response.Status = "400"
+        return 0
+    }
+
+    set colors = {
+        "headerMain":"#019790",
+        "headerLine":"#008781",
+        "headerArrow":"#2F2A95"
+    } 
+
+    set data = ##class(dc.ExampleClass).getDigestData(week, year)
+
+    set headers = []
+
+    for i=0:1:(data.%Size() - 1) {
+        set cat = data.%Get(i)
+        if (cat.count = 0) continue
+
+        set obj = {
+            "category": (cat.name),
+            "count": (cat.count)
+        }
+        do headers.%Push(obj)
+    }
+
+    if (headers.%Size() = 0) {
+        set %response.Status = "400"
+        return 0
+    }
+
+    set headersIter = headers.%GetIterator()
+    set dataIter = data.%GetIterator()
+
+    return 1
+</script>
+</head>
+<body style="background:#E5E5E5;font-family:Arial, Helvetica, sans-serif;font-size:14px;height:100%;width:100%;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;">
+    <center>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="background:#E5E5E5;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;height:100%;width:100%;">
+            <tr><td align="center" valign="top" id="bodyCell" style="mso-line-height-rule:exactly;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;height:100%;width:100%;padding:10px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;">
+                        <tr><td valign="top" id="templatePreheader" style="mso-line-height-rule:exactly;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;">
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;">
+                                    <tbody>
+                                        <tr><td valign="top" style="padding-top:9px;mso-line-height-rule:exactly;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;">
+                                                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%;min-width:100%;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;" width="100%">
+                                                    <tbody>
+                                                        <tr><td valign="top" style="padding-bottom:9px;mso-line-height-rule:exactly;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;word-break:break-word;">
+                                                                <table style="width:100%;margin:auto;max-width:600px;min-width:320px;border-collapse:collapse;mso-table-lspace:0pt;mso-table-rspace:0pt;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;">
+                                                                    <tbody>
+                                                                        <tr><td style="mso-line-height-rule:exactly;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;">
+                                                                        <div>
+                                                                            <img src="https://openexchange.intersystems.com/mp/img/subscription/logo.png" style="width: 200px; height: 48px; margin: 20px 0;">
+                                                                        </div>
+
+                                                                        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; background-color: #(colors.headerMain)#; height: 6px;"><tr><td> </td></tr></table>
+                                                                        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; height: 6px;"><tr><td> </td></tr></table>
+                                                                        <table border="0" cellpadding="0" cellspacing="29" style="width: 100%; background-color: #(colors.headerMain)#;color: #FFFFFF;"><tr><td>
+                                                                            
+                                                                            <table  border="0" cellpadding="0" cellspacing="0" style="width: 100%; margin-top: 24px;vertical-align: top;">
+                                                                                <tr style="vertical-align: top;">
+                                                                                    <td style="font-weight: bold;font-size: 14px;line-height: 17px;width: 50%;color: #FFFFFF; padding-right: 10px;">Last week on InterSystems Open Exchange platform appeared:</td>
+                                                                                    <td rowspan="2">
+                                                                                        <table border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+                                                                                            
+                                                                                            <csp:while condition="headersIter.%GetNext(, .row)" counter="i">
+                                                                                                <tr style="font-size: 16px;font-weight: bold;line-height: 19px;color: #FFFFFF;"><td style="text-transform: uppercase;padding-top: #($case(i,1:0,:9))#px;">#(row.category)#</td><td style="text-align: right;">#(row.count)#</td></tr>
+                                                                                                <tr><td colspan="2" style="height: 1px;background: #(colors.headerLine)#; margin-bottom: 9px;"></td></tr>
+                                                                                            </csp:while>
+
+                                                                                            <csp:loop counter="i" from="1" step="1" to="#(maxCategories-headers.%Size())#">
+                                                                                                <tr style="font-size: 16px;font-weight: bold;line-height: 19px;"><td style="text-transform: uppercase;padding-bottom: 9px;">&nbsp;</td></tr>
+                                                                                            </csp:loop>
+
+                                                                                        </table>
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <tr><td style="vertical-align: bottom;">
+                                                                                    <span style="color: #(colors.headerArrow)#;font-size: 14px;line-height: 16px; ">More details<br>&#8595;</span>
+                                                                                </td></tr>
+                                                                            </table>
+
+                                                                        </td></tr></table>
+
+        <div style="padding: 30px; font-style: normal; font-weight: normal; font-size: 18px; line-height: 26px; font-family: Helvetica, Gotham, 'Helvetica Neue', Arial, 'sans-serif';background-color: #ffffff;">
+
+            <csp:while condition="dataIter.%GetNext(,.category)">
+
+                <csp:if condition="category.count '= 0">
+                    <div style="font-size: 18px;line-height: 21px;color: #000000;border-bottom: 1px solid #E6E6E6;">#(category.name)#</div>
+                </csp:if>
+
+                #[set itemsIter = category.items.%GetIterator()]#
+
+                <csp:while condition = "itemsIter.%GetNext(,.item)" counter="itemRow">
+                    <csp:if condition="itemRow '= 1">
+                        <div style="font-size: 18px;line-height: 21px;color: #000000;border-bottom: 1px solid #E6E6E6; margin-left: 20%;"></div>
+                    </csp:if>
+
+                    <csp:if condition="category.id = 1"> <!--Solutions-->
+                        <div style="margin-left: 20%;font-size: 14px;line-height: 20px;">
+                            <p style="font-size: 16px;">
+                                <a style="text-decoration: none; color: #2f2a95;" href="#(item.solLink)#"><b>#(item.solName)#</b></a> <br>by <a style="text-decoration: none; color: #2f2a95;" href="#(item.pubLink)#">#(item.pubName)#</a>
+                            </p>
+                            <p>#(item.shortDesc)#</p>
+                        </div>
+                    <csp:elseif condition="category.id = 2"> <!--Releases-->
+                        <div style="margin-left: 20%;font-size: 14px;line-height: 20px;">
+                            <p style="font-size: 16px;">
+                                <a style="text-decoration: none; color: #2f2a95;" href="#(item.solLink)#"><b>#(item.solName)#</b></a> <br>by <a style="text-decoration: none; color: #2f2a95;" href="#(item.pubLink)#">#(item.pubName)#</a>
+                            </p>
+                            <p>
+                                #[set versionIter = item.versions.%GetIterator()]#
+                                <csp:while condition="versionIter.%GetNext(,.version)">
+                                    <strong>v#(version.version)#</strong>
+                                    #(version.notes)#
+                                </csp:while>
+                            </p>
+                        </div>
+                    </csp:if>
+
+                </csp:while>
+            
+            </csp:while>
+
+        </div>
+
+        <!--Footer-->
+        <div style="background-color: #FFFFFF;  padding: 0px 30px;"><hr style="padding: 10px; height: 0;border: none;border-top: 1px solid #e6e6e6;margin:0"></div>
+        <div style="text-align: center;font-size:13px;background-color:#fff;font-family: Helvetica, Gotham, 'Helvetica Neue', Arial, 'sans-serif';">
+        <div style="padding: 0 4.5%; font-weight: 600; font-size: 11px;">
+        <a href="http://learning.intersystems.com/" style="margin:0 7px 0 0; text-decoration: none;color:#2f2a95;white-space: nowrap;">Learning</a> 
+        <a href="http://docs.intersystems.com/" style="margin:0 7px;text-decoration: none;color:#2f2a95;white-space: nowrap;">Documentation</a> 
+        <a href="https://community.intersystems.com/" style="margin:0 7px;text-decoration: none;color:#2f2a95;white-space: nowrap;">Community</a> 
+        <a href="https://openexchange.intersystems.com/" style="margin:0 7px;text-decoration: none;color:#2f2a95;white-space: nowrap;">Open Exchange</a>
+        <a href="https://partner.intersystems.com/" style="margin:0 7px;text-decoration: none;color:#2f2a95;white-space: nowrap;">Partner Directory</a>
+        <a href="https://globalmasters.intersystems.com/" style="margin:0 0 0 7px;text-decoration: none;color:#2f2a95;white-space: nowrap;">Global Masters</a>
+        </div>
+        <div style="padding: 0 4.5%; padding-top: 25px;">
+
+                    
+        <a href="https://www.facebook.com/InterSystemsDev/" style="margin:0 10px;"><img src="https://openexchange.intersystems.com/mp/img/subscription/fb-logo.png" style="width:24px;border:0;"></a> 
+        <a href="https://twitter.com/intersystemsdev" style="margin:0 10px;"><img src="https://openexchange.intersystems.com/mp/img/subscription/twitter-logo.png" style="width:24px;border:0;" ></a> 
+        <a href="https://t.me/intersystemsdev" style="margin:0 10px;"><img src="https://openexchange.intersystems.com/mp/img/subscription/telegram-logo.png" style="width:24px;border:0;" ></a> 
+        <a href="https://www.youtube.com/c/InterSystemsDevelopers" style="margin:0 10px;"><img src="https://openexchange.intersystems.com/mp/img/subscription/youtube-logo.png" style="width:24px;border:0;" ></a> 
+        <a href="https://www.linkedin.com/company/intersystems-developer-community/" style="margin:0 10px;"><img src="https://openexchange.intersystems.com/mp/img/subscription/linkedin-logo.png" style="width:24px;border:0;"></a> 
+                        
+                
+        </div>
+        <div style="padding-top:25px; font-weight: bold;">
+        Happy Coding!
+        </div>
+
+        <div style="padding: 30px; color: #a1a1a1;">
+            <div>
+                <div style="font-size:13px;">You are receiving this email because you are member of <a href="https://openexchange.intersystems.com/" style="text-decoration: none;color:#2f2a95;">InterSystems Open Exchange.</a> </div>
+        
+                <div style="font-size:13px;">If you want manage your subscriptions follow this link <a href="" style="text-decoration: none;color:#2f2a95;">Manage Subscriptions</a>.</div>
+                
+                <div style="font-size:13px;"><a href="" style="margin:0 10px;text-decoration: none;color:#2f2a95;">Unsubscribe from everything in one click.</a></div>
+            </div>
+        </div>
+        </div>
+        </td></tr></tbody></table>
+        </td>
+        </tr></tbody></table>
+        </td>
+        </tr></tbody></table>
+        </td>
+        </tr></table>
+        </td>
+        </tr></table>
+    </center>
+</body>
+</html>

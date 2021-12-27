@@ -12,6 +12,10 @@
         "service": "iris",
         "internalPort": 52773
       },
+      "links": {
+        "WebTerminal": "${serverUrl}/terminal/",
+        "Digest": "${serverUrl}/templates/digest.csp?week=47&year=2021"
+      },
       "active": true
     },
     "sqltools.connections": [
