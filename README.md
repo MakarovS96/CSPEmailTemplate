@@ -40,7 +40,7 @@ Or open WebTerminal (preinstalled)
 Configure SMPT server
 
 ```objectscript
-USER>set sc = ##class(dc.ExampleClass).ConfgureSMTP("{SMTP_Username}", "{SMTP_Password}", "{From}", "{To}", "{SMTP_Server}", "{Port}")
+set sc = ##class(dc.ExampleClass).ConfgureSMTP("{SMTP_Username}", "{SMTP_Password}", "{From}", "{To}", "{SMTP_Server}", "{Port}")
 ```
    
 **SMTP_Username** - Your username on SMTP server. *Requireq*   
@@ -53,7 +53,7 @@ USER>set sc = ##class(dc.ExampleClass).ConfgureSMTP("{SMTP_Username}", "{SMTP_Pa
 Send Test Email
 
 ```objectscript
-USER>set sc = ##class(dc.ExampleClass).SendEmail()
+set sc = ##class(dc.ExampleClass).SendEmail()
 ```
 
 Result
